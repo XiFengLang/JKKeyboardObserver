@@ -1,6 +1,7 @@
 # JKKeyboardObserver
 iOS全局监听键盘活动
 
+[详情戳简书](http://www.jianshu.com/p/8c5fb5b06771)
 
 ```Object-C
 导入#import "AppDelegate+JKKeyboardObserver.h" 
