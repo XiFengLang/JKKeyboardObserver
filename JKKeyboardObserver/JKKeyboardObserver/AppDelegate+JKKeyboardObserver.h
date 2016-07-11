@@ -76,9 +76,6 @@
 
 
 @interface AppDelegate (JKKeyboardObserver)
-//@property (nonatomic, strong)JKKeyboardObserver * keyboardObserver;
-
-
 /**
  *  返回appdelegate的快速方法
  */
@@ -86,7 +83,7 @@
 
 
 /**
- *  开始监听,建议在viewWillAppear调用
+ *  开始监听
  */
 - (void)startObserveKeyboard;
 
@@ -100,11 +97,11 @@
  */
 - (void)keyboardWillShow:(KeyboardObserverBlock)willShowBlock keyboardWillHide:(KeyboardObserverBlock)willHideBlock;
 
-
+- (void)keyboardWillShow:(KeyboardObserverBlock)willShowBlock keyboardWillHide:(KeyboardObserverBlock)willHideBlock completion:(void(^)())completion;
 
 
 /**
- *  结束监听，建议在viewWillDisappear调用
+ *  结束监听
  */
 - (void)stopObserveKeyboard;
 

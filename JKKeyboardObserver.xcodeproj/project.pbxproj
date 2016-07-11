@@ -32,7 +32,6 @@
 		9F63F3901C96D21600E2A2CD /* AppDelegate+JKKeyboardObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+JKKeyboardObserver.m"; sourceTree = "<group>"; };
 		9F63F3911C96D21600E2A2CD /* JKKeyboardObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKKeyboardObserver.h; sourceTree = "<group>"; };
 		9F63F3921C96D21600E2A2CD /* JKKeyboardObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKKeyboardObserver.m; sourceTree = "<group>"; };
-		9F63F3931C96D21600E2A2CD /* UIKeyboardInputMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKeyboardInputMode.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +93,6 @@
 				9F63F3901C96D21600E2A2CD /* AppDelegate+JKKeyboardObserver.m */,
 				9F63F3911C96D21600E2A2CD /* JKKeyboardObserver.h */,
 				9F63F3921C96D21600E2A2CD /* JKKeyboardObserver.m */,
-				9F63F3931C96D21600E2A2CD /* UIKeyboardInputMode.h */,
 			);
 			path = JKKeyboardObserver;
 			sourceTree = "<group>";
@@ -320,6 +318,7 @@
 				9F63F38D1C96D20300E2A2CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

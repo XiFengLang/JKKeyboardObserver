@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import "UIKeyboardInputMode.h"
 
 typedef void(^KeyboardObserverBlock)(CGFloat keyboardHeight, CGFloat duration);
-
+typedef void(^KeyboardObserverCompletionBlock)(void);
 
 @interface JKKeyboardObserver : NSObject
 
@@ -21,10 +20,10 @@ typedef void(^KeyboardObserverBlock)(CGFloat keyboardHeight, CGFloat duration);
  */
 - (void)keyboardWillShow:(KeyboardObserverBlock)block;
 
-
+- (void)keyboardWillShow:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion;
 /**
  *  处理隐藏的Block方法，自带动画效果，无需再使用UIView的动画
  */
 - (void)keyboardWillHide:(KeyboardObserverBlock)block;
-
+- (void)keyboardWillHide:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion;
 @end

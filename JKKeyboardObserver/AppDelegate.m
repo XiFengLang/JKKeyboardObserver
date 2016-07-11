@@ -20,10 +20,6 @@
 }
 
 
-
-
-
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [self startObserveKeyboard];
 }

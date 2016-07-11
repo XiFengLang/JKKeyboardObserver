@@ -11,6 +11,7 @@
 @interface JKKeyboardObserver ()
 @property (nonatomic,copy)KeyboardObserverBlock showBlock;
 @property (nonatomic,copy)KeyboardObserverBlock hideBlock;
+@property (nonatomic,copy)KeyboardObserverCompletionBlock completion;
 @end
 
 
@@ -30,34 +31,19 @@
     NSNumber * duration = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     CGFloat time = [duration floatValue];
     
+    CGRect startFrame = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect endFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    UIKeyboardInputModeController *key = [UIKeyboardInputModeController sharedInputModeController];
+    //JKLog(@"duration    %@     start    %@      end      %@       size    %@",duration,NSStringFromCGRect(startFrame),NSStringFromCGRect(endFrame),NSStringFromCGSize(keyboardSize));
     
-    //当前输入法
-    UIKeyboardInputMode *currentInputMode = [key currentInputMode];
-    
-    //第三方扩展输入法
-    NSArray *extensionInputModes = [key extensionInputModes];
-    
-    
-    if ([extensionInputModes containsObject:currentInputMode]) {
-        //NSLog(@"current input mode (%@) is the 3rd party input mode", currentInputMode.identifier);
-//        if (time == 0.0) {
-//            time = 0.25;
-//        }
-        time = 0.0;
-    } else {
-        //NSLog(@"current input mode (%@) is build-in input mode", currentInputMode.identifier);
+    // 第三方输入法会发三次willShow通知，可通过以下条件判断
+    if (startFrame.size.height > 0 && endFrame.size.height == keyboardSize.height) {
+        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            if (self.showBlock) {
+                self.showBlock(keyboardSize.height,time);
+            }
+        } completion:nil];
     }
-    
-    
-    
-    
-    [UIView animateWithDuration:time delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        if (self.showBlock) {
-            self.showBlock(keyboardSize.height,time);
-        }
-    } completion:nil];
 }
 
 - (void)keyboardWillHideWithNotification:(NSNotification *)notification{
@@ -69,7 +55,13 @@
         if (self.hideBlock) {
             self.hideBlock(0,time);
         }
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            if (self.completion) {
+                self.completion();
+            }
+        }
+    }];
     
 }
 
@@ -82,9 +74,19 @@
     _hideBlock = block;
 }
 
+- (void)keyboardWillShow:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion{
+    _showBlock = block;
+    _completion = completion;
+}
+
+- (void)keyboardWillHide:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion{
+    _hideBlock = block;
+    _completion = completion;
+}
+
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     _showBlock = nil;
     _hideBlock = nil;
 }

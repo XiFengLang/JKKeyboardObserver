@@ -12,14 +12,16 @@
 @implementation AppDelegate (KeyboardOberver)
 
 
+static char * JKKeyboardObserverKey = "JKKeyboardObserverKey";
 
 - (void)setKeyboardObserver:(JKKeyboardObserver *)keyboardObserver{
-    objc_setAssociatedObject(self, "JKKeyboardObserverKey", keyboardObserver, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, JKKeyboardObserverKey, keyboardObserver, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (JKKeyboardObserver *)keyboardObserver{
-    return objc_getAssociatedObject(self, "JKKeyboardObserverKey");
+    return objc_getAssociatedObject(self, JKKeyboardObserverKey);
 }
+
 
 + (AppDelegate *)appDelegate{
     return (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -29,7 +31,7 @@
 
 - (void)startObserveKeyboard{
     if (!self.keyboardObserver) {
-        self.keyboardObserver = [[JKKeyboardObserver alloc]init];
+        self.keyboardObserver = [[JKKeyboardObserver alloc] init];
     }
 }
 
@@ -42,8 +44,13 @@
 
 - (void)keyboardWillShow:(KeyboardObserverBlock)willShowBlock keyboardWillHide:(KeyboardObserverBlock)willHideBlock{
     [self.keyboardObserver keyboardWillShow:willShowBlock];
-    [self.keyboardObserver keyboardWillHide:willHideBlock]; 
+    [self.keyboardObserver keyboardWillHide:willHideBlock];
 }
 
+
+- (void)keyboardWillShow:(KeyboardObserverBlock)willShowBlock keyboardWillHide:(KeyboardObserverBlock)willHideBlock completion:(void(^)())completion{
+    [self.keyboardObserver keyboardWillShow:willShowBlock completion:completion];
+    [self.keyboardObserver keyboardWillHide:willHideBlock completion:completion];
+}
 
 @end
