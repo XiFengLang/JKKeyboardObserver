@@ -7,7 +7,9 @@
 //
 
 #import "ViewController.h"
-#import "AppDelegate+JKKeyboardObserver.h"
+#import "JKKeyboardManager.h"
+#import "UIControl+JKSecurityExtension.h"
+
 @interface ViewController ()
 
 @end
@@ -16,22 +18,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [JKKeyboardManager sharedKeyboardManager].robotizationEnable = YES;
+    [JKKeyboardManager sharedKeyboardManager].topSpacingToFirstResponder = 20;
+    [[JKKeyboardManager sharedKeyboardManager]setTopSpacingToFirstResponder:40 forViewControllerClass:self.class];
+    [JKKeyboardManager sharedKeyboardManager].showExtensionToolBar = YES;
+
 }
 
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    
-    
-    [[AppDelegate appDelegate]keyboardWillShow:^(CGFloat keyboardHeight, CGFloat duration) {
-        // do something
-        
-    } keyboardWillHide:^(CGFloat keyboardHeight, CGFloat duration) {
-        // do something
-        
-    }];
+- (IBAction)button:(id)sender {
+    NSLog(@"button 被点击");
 }
+
 
 
 

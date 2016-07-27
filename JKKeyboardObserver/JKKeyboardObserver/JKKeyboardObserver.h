@@ -21,6 +21,9 @@ typedef void(^KeyboardObserverCompletionBlock)(void);
 - (void)keyboardWillShow:(KeyboardObserverBlock)block;
 
 - (void)keyboardWillShow:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion;
+
+
+
 /**
  *  处理隐藏的Block方法，自带动画效果，无需再使用UIView的动画
  */

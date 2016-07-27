@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "AppDelegate+JKKeyboardObserver.h"
+#import "JKKeyboardManager.h"
 @interface AppDelegate ()
 
 @end
@@ -16,17 +16,18 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [[JKKeyboardManager sharedKeyboardManager] startObserveKeyboard];
     return YES;
 }
 
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    [self startObserveKeyboard];
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    [self stopObserveKeyboard];
-}
+//- (void)applicationDidBecomeActive:(UIApplication *)application {
+//    [[JKKeyboardManager sharedKeyboardManager] startObserveKeyboard];
+//}
+//
+//- (void)applicationDidEnterBackground:(UIApplication *)application {
+//    [[JKKeyboardManager sharedKeyboardManager] stopObserveKeyboard];
+//}
 
 
 

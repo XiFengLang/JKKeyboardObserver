@@ -3,15 +3,16 @@
 //  UDP客户端new
 //
 //  Created by 蒋鹏 on 16/3/2.
-//  Copyright © 2016年 iMac1. All rights reserved.
+//  Copyright © 2016年 深圳市见康云科技有限公司. All rights reserved.
 //
 
-#import "JKKeyboardObserver.h"
+#import "JKKeyboardManager.h"
 
 @interface JKKeyboardObserver ()
 @property (nonatomic,copy)KeyboardObserverBlock showBlock;
 @property (nonatomic,copy)KeyboardObserverBlock hideBlock;
-@property (nonatomic,copy)KeyboardObserverCompletionBlock completion;
+@property (nonatomic,copy)KeyboardObserverCompletionBlock showCompletion;
+@property (nonatomic,copy)KeyboardObserverCompletionBlock hideCompletion;
 @end
 
 
@@ -28,21 +29,26 @@
     NSDictionary * userInfo = [notification userInfo];
     NSValue * value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
-    NSNumber * duration = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    CGFloat time = [duration floatValue];
+//    NSNumber * duration = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+//    CGFloat time = [duration floatValue];
     
     CGRect startFrame = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     //JKLog(@"duration    %@     start    %@      end      %@       size    %@",duration,NSStringFromCGRect(startFrame),NSStringFromCGRect(endFrame),NSStringFromCGSize(keyboardSize));
     
-    // 第三方输入法会发三次willShow通知，可通过以下条件判断
     if (startFrame.size.height > 0 && endFrame.size.height == keyboardSize.height) {
         [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             if (self.showBlock) {
-                self.showBlock(keyboardSize.height,time);
+                self.showBlock(keyboardSize.height,0.25);
             }
-        } completion:nil];
+        } completion:^(BOOL finished) {
+            //            if (finished) {
+            if (self.showCompletion) {
+                self.showCompletion();
+            }
+            //            }
+        }];
     }
 }
 
@@ -56,11 +62,11 @@
             self.hideBlock(0,time);
         }
     } completion:^(BOOL finished) {
-        if (finished) {
-            if (self.completion) {
-                self.completion();
-            }
+        //        if (finished) {
+        if (self.hideCompletion) {
+            self.hideCompletion();
         }
+        //        }
     }];
     
 }
@@ -76,12 +82,12 @@
 
 - (void)keyboardWillShow:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion{
     _showBlock = block;
-    _completion = completion;
+    _showCompletion = completion;
 }
 
 - (void)keyboardWillHide:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion{
     _hideBlock = block;
-    _completion = completion;
+    _hideCompletion = completion;
 }
 
 - (void)dealloc{
@@ -89,6 +95,8 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     _showBlock = nil;
     _hideBlock = nil;
+    _showCompletion = nil;
+    _hideCompletion = nil;
 }
 
 
