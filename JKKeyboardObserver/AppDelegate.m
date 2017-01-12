@@ -16,7 +16,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[JKKeyboardManager sharedKeyboardManager] startObserveKeyboard];
+    [[JKKeyboardManager sharedKeyboardManager] setRobotizationEnable:YES];
     return YES;
 }
 

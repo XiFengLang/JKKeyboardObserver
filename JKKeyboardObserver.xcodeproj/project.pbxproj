@@ -14,11 +14,11 @@
 		9F63F3841C96D20300E2A2CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F63F3831C96D20300E2A2CD /* Assets.xcassets */; };
 		9F63F3871C96D20300E2A2CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F63F3851C96D20300E2A2CD /* LaunchScreen.storyboard */; };
 		9F63F3951C96D21600E2A2CD /* JKKeyboardObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F63F3921C96D21600E2A2CD /* JKKeyboardObserver.m */; };
+		9FCABB8E1E27611B00F33788 /* JKKeyboardToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCABB8D1E27611B00F33788 /* JKKeyboardToolBar.m */; };
 		9FDE8E791D477187002E06C4 /* UIView+JKFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FDE8E781D477187002E06C4 /* UIView+JKFirstResponder.m */; };
 		9FDE8E7D1D4774E7002E06C4 /* JKKeyboardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FDE8E7C1D4774E7002E06C4 /* JKKeyboardManager.m */; };
 		9FDE8E811D4858A4002E06C4 /* jk_arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FDE8E7F1D4858A4002E06C4 /* jk_arrow_left.png */; };
 		9FDE8E821D4858A4002E06C4 /* jk_arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FDE8E801D4858A4002E06C4 /* jk_arrow_right.png */; };
-		9FDE8E851D486FBD002E06C4 /* UIControl+JKSecurityExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FDE8E841D486FBD002E06C4 /* UIControl+JKSecurityExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,14 +34,14 @@
 		9F63F3881C96D20300E2A2CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F63F3911C96D21600E2A2CD /* JKKeyboardObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKKeyboardObserver.h; sourceTree = "<group>"; };
 		9F63F3921C96D21600E2A2CD /* JKKeyboardObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKKeyboardObserver.m; sourceTree = "<group>"; };
+		9FCABB8C1E27611B00F33788 /* JKKeyboardToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKKeyboardToolBar.h; sourceTree = "<group>"; };
+		9FCABB8D1E27611B00F33788 /* JKKeyboardToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKKeyboardToolBar.m; sourceTree = "<group>"; };
 		9FDE8E771D477187002E06C4 /* UIView+JKFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+JKFirstResponder.h"; sourceTree = "<group>"; };
 		9FDE8E781D477187002E06C4 /* UIView+JKFirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+JKFirstResponder.m"; sourceTree = "<group>"; };
 		9FDE8E7B1D4774E7002E06C4 /* JKKeyboardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKKeyboardManager.h; sourceTree = "<group>"; };
 		9FDE8E7C1D4774E7002E06C4 /* JKKeyboardManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKKeyboardManager.m; sourceTree = "<group>"; };
 		9FDE8E7F1D4858A4002E06C4 /* jk_arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jk_arrow_left.png; sourceTree = "<group>"; };
 		9FDE8E801D4858A4002E06C4 /* jk_arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jk_arrow_right.png; sourceTree = "<group>"; };
-		9FDE8E831D486FBD002E06C4 /* UIControl+JKSecurityExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+JKSecurityExtension.h"; sourceTree = "<group>"; };
-		9FDE8E841D486FBD002E06C4 /* UIControl+JKSecurityExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+JKSecurityExtension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,13 +74,11 @@
 		9F63F3761C96D20300E2A2CD /* JKKeyboardObserver */ = {
 			isa = PBXGroup;
 			children = (
-				9FDE8E831D486FBD002E06C4 /* UIControl+JKSecurityExtension.h */,
-				9FDE8E841D486FBD002E06C4 /* UIControl+JKSecurityExtension.m */,
+				9F63F38E1C96D21600E2A2CD /* JKKeyboardObserver */,
 				9F63F37A1C96D20300E2A2CD /* AppDelegate.h */,
 				9F63F37B1C96D20300E2A2CD /* AppDelegate.m */,
 				9F63F37D1C96D20300E2A2CD /* ViewController.h */,
 				9F63F37E1C96D20300E2A2CD /* ViewController.m */,
-				9F63F38E1C96D21600E2A2CD /* JKKeyboardObserver */,
 				9F63F3801C96D20300E2A2CD /* Main.storyboard */,
 				9F63F3831C96D20300E2A2CD /* Assets.xcassets */,
 				9F63F3851C96D20300E2A2CD /* LaunchScreen.storyboard */,
@@ -108,6 +106,8 @@
 				9FDE8E781D477187002E06C4 /* UIView+JKFirstResponder.m */,
 				9FDE8E7B1D4774E7002E06C4 /* JKKeyboardManager.h */,
 				9FDE8E7C1D4774E7002E06C4 /* JKKeyboardManager.m */,
+				9FCABB8C1E27611B00F33788 /* JKKeyboardToolBar.h */,
+				9FCABB8D1E27611B00F33788 /* JKKeyboardToolBar.m */,
 			);
 			path = JKKeyboardObserver;
 			sourceTree = "<group>";
@@ -193,8 +193,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FCABB8E1E27611B00F33788 /* JKKeyboardToolBar.m in Sources */,
 				9F63F3951C96D21600E2A2CD /* JKKeyboardObserver.m in Sources */,
-				9FDE8E851D486FBD002E06C4 /* UIControl+JKSecurityExtension.m in Sources */,
 				9F63F37F1C96D20300E2A2CD /* ViewController.m in Sources */,
 				9FDE8E7D1D4774E7002E06C4 /* JKKeyboardManager.m in Sources */,
 				9F63F37C1C96D20300E2A2CD /* AppDelegate.m in Sources */,

@@ -9,10 +9,25 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
+
 typedef void(^KeyboardObserverBlock)(CGFloat keyboardHeight, CGFloat duration);
 typedef void(^KeyboardObserverCompletionBlock)(void);
 
 @interface JKKeyboardObserver : NSObject
+
+
+/**
+ *  开始监听
+ */
+- (void)startObserveKeyboard;
+
+
+
+
+/**
+ *  结束监听
+ */
+- (void)stopObserveKeyboard;
 
 
 /**
@@ -29,4 +44,11 @@ typedef void(^KeyboardObserverCompletionBlock)(void);
  */
 - (void)keyboardWillHide:(KeyboardObserverBlock)block;
 - (void)keyboardWillHide:(KeyboardObserverBlock)block completion:(KeyboardObserverCompletionBlock)completion;
+
+
+/**
+ 结束监听，释放Block强引用的资源
+ */
+- (void)relieveBlockStrongReference;
+
 @end

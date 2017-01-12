@@ -14,9 +14,23 @@
 /**    遍历第一响应者    */
 - (UIView *)jk_findFirstResponder;
 
+
 /**    相对window的frame    */
 - (CGRect)jk_relativeFrame;
 
-+ (UIButton *)buttonWithBounds:(CGRect)bounds image:(UIImage *)image target:(id)target action:(SEL)action;
+
+/**
+ 能否成为FirstResponder--输入框
+
+ */
+- (BOOL)jk_canBecameFirstResponder;
+
+
+/**
+ 遍历一个view中的所有输入框
+
+ @return 遍历一个view中的所有输入框
+ */
+- (NSArray *)jk_traverseResponderViews;
 
 @end

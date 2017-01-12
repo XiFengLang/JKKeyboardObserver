@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "JKKeyboardManager.h"
-#import "UIControl+JKSecurityExtension.h"
 
 @interface ViewController ()
 
@@ -18,18 +17,47 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [JKKeyboardManager sharedKeyboardManager].robotizationEnable = YES;
-    [JKKeyboardManager sharedKeyboardManager].topSpacingToFirstResponder = 20;
-    [[JKKeyboardManager sharedKeyboardManager]setTopSpacingToFirstResponder:40 forViewControllerClass:self.class];
-    [JKKeyboardManager sharedKeyboardManager].showExtensionToolBar = YES;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Push" style:UIBarButtonItemStylePlain target:self action:@selector(push)];
+    
+    
+    if (self.navigationController.viewControllers.count == 1) {
+        KeyboardManager().robotizationEnable = YES;
+        KeyboardManager().topSpacingToFirstResponder = 20;
+        KeyboardManager().showExtensionToolBar = YES;
+    }
+    
 
+    
+    
+//    [KeyboardManager() setTopSpacingToFirstResponder:20 forViewControllerClass:self.class];
 }
 
-- (IBAction)button:(id)sender {
+- (IBAction)button:(UIButton *)button {
     NSLog(@"button 被点击");
+    [[JKKeyboardManager sharedKeyboardManager] hideKeyBoard];
 }
 
 
+- (void)push {
+    ViewController * vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ViewController"];
+    KeyboardManager().robotizationEnable = NO;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    NSLog(@"%@",self.navigationController.viewControllers);
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    NSLog(@"%@",self.navigationController.viewControllers);
+}
+
+
+- (void)dealloc {
+    NSLog(@"%@已释放",[self class]);
+}
 
 @end
