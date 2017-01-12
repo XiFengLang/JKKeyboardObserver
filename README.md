@@ -1,63 +1,24 @@
-# JKKeyboardObserver
-iOS全局监听键盘活动
+# 自动监听键盘弹出，自动处理键盘遮盖问题,动画调整输入框和键盘的相对位置。
+`1.1`
 
-[详情戳简书](http://www.jianshu.com/p/8c5fb5b06771)
 
+~~[详情戳简书](http://www.jianshu.com/p/8c5fb5b06771)~~，改版太大，参考意义不大。
+
+-------
+
+**几行代码即可**
 ```Object-C
-导入#import "AppDelegate+JKKeyboardObserver.h" 
- 
- *************************************用法1.App全局监听*************************************
- 
- // AppDelegate的2个方法中调用开始、结束监听
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    [self startObserveKeyboard];
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    [self stopObserveKeyboard];
-}
+    KeyboardManager().robotizationEnable = YES;
+    KeyboardManager().topSpacingToFirstResponder = 20;  // 设置键盘到输入框的距离的全局效果，
+    KeyboardManager().showExtensionToolBar = YES;      // 可以切换上下左右的输入框
+    
+     // 设置特定控制器中键盘到输入框的距离
+//    [KeyboardManager() setTopSpacingToFirstResponder:30 forViewControllerClass:self.class];
+```
 
 
-// 相关的控制器里调用监听的方法，block自带动画，第三方输入法升起会瞬间完成动画（时间为0）
- - (void)viewWillAppear:(BOOL)animated{
- [super viewWillAppear:animated];
- 
- [[AppDelegate appDelegate]keyboardWillShow:^(CGFloat keyboardHeight, CGFloat duration) {
- // do something
- 
- } keyboardWillHide:^(CGFloat keyboardHeight, CGFloat duration) {
- // do something
- 
- }];
- }
- 
- 
- 
- 
-************************************** 用法2.控制器局部监听*************************************
- 
- - (void)viewWillAppear:(BOOL)animated{
- [super viewWillAppear:animated];
- 
- // 步骤1.开始监听,开始后才能 初始化键盘监听者
- [[AppDelegate appDelegate]startObserveKeyboard];
- 
- // 步骤2.处理事件，步骤1写在appdelegate后步骤2可全局使用
- [[AppDelegate appDelegate]keyboardWillShow:^(CGFloat keyboardHeight, CGFloat duration) {
- // do something
- 
- } keyboardWillHide:^(CGFloat keyboardHeight, CGFloat duration) {
- // do something
- 
- }];
- }
- 
- 
- - (void)viewWillDisappear:(BOOL)animated{
- [super viewWillDisappear:animated];
- 
- // 步骤3.结束监听,有开始就必须有结束，避免内存泄露
- [[AppDelegate appDelegate]stopObserveKeyboard];
- 
- }
+
+**隐藏键盘**
+```Object-C
+     [KeyboardManager() hideKeyboard];
 ```
