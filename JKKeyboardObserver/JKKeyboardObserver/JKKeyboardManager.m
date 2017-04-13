@@ -17,13 +17,16 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 /**    监听者    */
 @property (nonatomic, strong)JKKeyboardObserver * keyboardObserver;
 
-/**    键盘和输入框的距离    */
+/**    缓存键盘和输入框的距离    */
 @property (nonatomic, strong)NSMutableDictionary * topSpacingMutDict;
 
 /**    当前控制器里的textField和textView    */
 @property (nonatomic, copy)NSArray * responderArray;
 
 
+/**
+ 自定义的TooBar
+ */
 @property (nonatomic, strong) JKKeyboardToolBar * toolBar;
 
 
@@ -33,6 +36,12 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 
 @property (nonatomic, weak) UIViewController * topViewController;
 @property (nonatomic, weak) UIView * currentFirstResponder;
+
+
+/**
+ 缓存当前控制器view的frame
+ */
+@property (nonatomic, strong) NSValue * tempFrame;
 @end
 
 @implementation JKKeyboardManager
@@ -167,6 +176,10 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
             
             CGFloat windowHeight = self.keyWindow.bounds.size.height;
             CGFloat distance = windowHeight - topSpacingToFirstResponder - keyboardHeight - CGRectGetMaxY(firstResponderFrame);
+            if (self.tempFrame == nil) {
+                self.tempFrame = [NSValue valueWithCGRect:currentViewController.view.frame];
+            }
+            
             if (distance < 0) {
                 CGRect tempRect = currentViewController.view.frame;
                 tempRect.origin.y += distance;
@@ -179,11 +192,10 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
             __strong typeof(weakSelf) self = weakSelf;
             self.keyboardHeight_temp = keyboardHeight;
             UIViewController * currentViewController = self.currentViewController;
-            CGRect tempRect = currentViewController.view.frame;
-            tempRect.origin.y = 0;
-            currentViewController.view.frame = tempRect;
+            currentViewController.view.frame = self.tempFrame.CGRectValue;
+            self.tempFrame = nil;
         }];
-
+        
     } else {
         [self stopObserveKeyboard];
     }
