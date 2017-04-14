@@ -152,6 +152,7 @@
 				TargetAttributes = {
 					9F63F3731C96D20300E2A2CD = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 756Y4UTJUH;
 					};
 				};
 			};
@@ -309,6 +310,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 756Y4UTJUH;
 				INFOPLIST_FILE = JKKeyboardObserver/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -322,6 +324,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 756Y4UTJUH;
 				INFOPLIST_FILE = JKKeyboardObserver/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

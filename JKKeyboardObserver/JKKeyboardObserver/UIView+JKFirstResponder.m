@@ -76,11 +76,11 @@ static NSString * const kSearchBarTextFieldClass = @"UISearchBarTextField";
             CGFloat x2 = CGRectGetMinX(frame2);
             CGFloat y2 = CGRectGetMinY(frame2);
             
-            if (y1 < y2)  return NSOrderedAscending;
+            if      (y1 < y2) return NSOrderedAscending;
             else if (y1 > y2) return NSOrderedDescending;
-            else if (x1 < x2)  return NSOrderedAscending;
+            else if (x1 < x2) return NSOrderedAscending;
             else if (x1 > x2) return NSOrderedDescending;
-            else    return NSOrderedSame;
+            else              return NSOrderedSame;
         }];
     }
 }

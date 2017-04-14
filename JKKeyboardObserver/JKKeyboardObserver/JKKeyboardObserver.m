@@ -18,12 +18,6 @@
 
 @implementation JKKeyboardObserver
 
-//- (instancetype)init{
-//    if (self = [super init]) {
-//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShowWithNotification:) name:UIKeyboardWillShowNotification object:nil];
-//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHideWithNotification:) name:UIKeyboardWillHideNotification object:nil];
-//    }return self;
-//}
 
 - (void)startObserveKeyboard {
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShowWithNotification:) name:UIKeyboardWillShowNotification object:nil];
@@ -39,13 +33,9 @@
     NSDictionary * userInfo = [notification userInfo];
     NSValue * value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
-    //    NSNumber * duration = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    //    CGFloat time = [duration floatValue];
     
     CGRect startFrame = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-    //JKLog(@"duration    %@     start    %@      end      %@       size    %@",duration,NSStringFromCGRect(startFrame),NSStringFromCGRect(endFrame),NSStringFromCGSize(keyboardSize));
     
     if (startFrame.size.height > 0 && endFrame.size.height == keyboardSize.height) {
         if (self.showBlock) {
@@ -74,7 +64,6 @@
             }
         }];
     }
-    
 }
 
 

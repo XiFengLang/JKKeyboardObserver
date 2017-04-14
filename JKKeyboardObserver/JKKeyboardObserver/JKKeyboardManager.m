@@ -14,13 +14,20 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 
 
 @interface JKKeyboardManager ()
-/**    监听者    */
+/**    
+ 实际的通知监听者
+ */
 @property (nonatomic, strong)JKKeyboardObserver * keyboardObserver;
 
-/**    缓存键盘和输入框的距离    */
+/**    
+ 缓存键盘和输入框的距离
+ */
 @property (nonatomic, strong)NSMutableDictionary * topSpacingMutDict;
 
-/**    当前控制器里的textField和textView    */
+
+/**
+ 当前控制器里的textField和textView
+ */
 @property (nonatomic, copy)NSArray * responderArray;
 
 
@@ -30,11 +37,21 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 @property (nonatomic, strong) JKKeyboardToolBar * toolBar;
 
 
-@property (nonatomic, strong)UIButton * leftArrowButton;
-@property (nonatomic, strong)UIButton * rightArrowButton;
+/**
+ 缓存键盘的高度,self.keyboardHeight == _keyboardHeight_temp;
+ */
 @property (nonatomic, assign)CGFloat keyboardHeight_temp;
 
+
+/**
+ 缓存当前的控制器
+ */
 @property (nonatomic, weak) UIViewController * topViewController;
+
+
+/**
+ 缓存当前的第一响应者
+ */
 @property (nonatomic, weak) UIView * currentFirstResponder;
 
 
@@ -61,6 +78,15 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 
 
 #pragma mark - 监听切换响应者
+
+
+
+/**
+ 监听切换响应者的事件，重新计算位置间隔，调整frame
+
+ @param notification UITextViewTextDidBeginEditingNotification、
+                     UITextFieldTextDidBeginEditingNotification
+ */
 - (void)firstResponderDidBeginEditing:(NSNotification *)notification{
     
     UITextView * firstResponder = notification.object;
@@ -180,6 +206,7 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
                 self.tempFrame = [NSValue valueWithCGRect:currentViewController.view.frame];
             }
             
+            
             if (distance < 0) {
                 CGRect tempRect = currentViewController.view.frame;
                 tempRect.origin.y += distance;
@@ -191,9 +218,15 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
         [self.keyboardObserver keyboardWillHide:^(CGFloat keyboardHeight, CGFloat duration) {
             __strong typeof(weakSelf) self = weakSelf;
             self.keyboardHeight_temp = keyboardHeight;
-            UIViewController * currentViewController = self.currentViewController;
-            currentViewController.view.frame = self.tempFrame.CGRectValue;
-            self.tempFrame = nil;
+            
+            
+            /// 在firstResponderWillBeginEdting方法，针对UITextView做了特殊处理，先调用                [firstResponder resignFirstResponder];又迅速调用[firstResponder becomeFirstResponder]; 所以会先收到keyboardWillHide的通知，此时self.tempFrame == Nil
+            /// 如果执行currentViewController.view.frame = self.tempFrame.CGRectValue;控制器view的长宽都会变成0，就可能会显示window的颜色
+            if (self.tempFrame) {
+                UIViewController * currentViewController = self.currentViewController;
+                currentViewController.view.frame = self.tempFrame.CGRectValue;
+                self.tempFrame = nil;
+            }
         }];
         
     } else {
@@ -226,16 +259,32 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 
 #pragma mark - 监听事件
 
+
+
 - (void)startObserveKeyboard{
     if (!self.keyboardObserver) {
         _keyboardObserver = [[JKKeyboardObserver alloc] init];
+        [_keyboardObserver startObserveKeyboard];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(firstResponderDidBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(firstResponderDidBeginEditing:) name:UITextFieldTextDidBeginEditingNotification object:nil];
-        [self.keyboardObserver startObserveKeyboard];
     }
 }
 
+
+
+
+/**
+ 停止主动监听键盘事件，会释放监听者、解除Block的强引用
+ */
 - (void)stopObserveKeyboard{
+    
+    /// 释放 self.toolBar,同将所有的响应者的inputAccessoryView设置为Nil,防止停止监听键盘后再次出现自定义的TooBar
+    self.toolBar = nil;
+    [self.responderArray enumerateObjectsUsingBlock:^(UITextField * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.inputAccessoryView = nil;
+    }];
+    
+    /// 移除监听者，释放Block强引用的对象
     if (self.keyboardObserver) {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidBeginEditingNotification object:nil];
@@ -285,7 +334,9 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
     NSArray * windows = [UIApplication sharedApplication].windows;
     for (id window in windows) {
         if ([window isKindOfClass:[UIWindow class]]) {
-            return (UIWindow *)window;
+            if ([(UIWindow *)window isHidden] == NO) {
+                return (UIWindow *)window;
+            }
         }
     }
     return [UIApplication sharedApplication].keyWindow;
@@ -305,23 +356,36 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 
 #pragma mark - ToolBar事件相关
 
+/// 根据当前第一响应者的index调节左右箭头按钮的使能状态
 - (void)adjustExtensionBarWithCurrentFirstResponderIndex:(NSUInteger)index {
-    if (self.responderArray && self.responderArray.count) {
-        if (index <= self.responderArray.count) {
-            if (index == 0) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.responderArray && self.responderArray.count) {
+            if (index <= self.responderArray.count) {
+                if (index == 0) {
+                    self.toolBar.leftArrowButton.enabled = NO;
+                    self.toolBar.rightArrowButton.enabled = YES;
+                } else if (index == self.responderArray.count -1) {
+                    self.toolBar.leftArrowButton.enabled = YES;
+                    self.toolBar.rightArrowButton.enabled = NO;
+                } else {
+                    self.toolBar.leftArrowButton.enabled = YES;
+                    self.toolBar.rightArrowButton.enabled = YES;
+                }
+            } else {
                 self.toolBar.leftArrowButton.enabled = NO;
-                self.toolBar.rightArrowButton.enabled = YES;
-            } else if (index == self.responderArray.count -1) {
-                self.toolBar.leftArrowButton.enabled = YES;
                 self.toolBar.rightArrowButton.enabled = NO;
             }
-        } else {
-            self.toolBar.leftArrowButton.enabled = NO;
-            self.toolBar.rightArrowButton.enabled = NO;
         }
-    }
+    });
 }
 
+
+
+/**
+ 点击⬅️箭头，会切换到左侧或者上面的输入框
+
+ @param button ⬅️
+ */
 - (void)didClickedLeftArrowButton:(UIButton *)button {
     NSUInteger index = [self.responderArray indexOfObject:self.currentFirstResponder];
     if (index < self.responderArray.count) {
@@ -333,9 +397,16 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
     }
 }
 
+
+
+/**
+ 点击➡️箭头，会切换到左侧或者上面的输入框
+ 
+ @param button ➡️
+ */
 - (void)didClickedRightArrowButton:(UIButton *)button {
     NSUInteger index = [self.responderArray indexOfObject:self.currentFirstResponder];
-    if (index < self.responderArray.count) {
+    if (index < self.responderArray.count-1) {
         UITextView * nextResponder = [self.responderArray objectAtIndex:index + 1];
         BOOL ret = [nextResponder becomeFirstResponder];
         if (ret) {
@@ -349,7 +420,7 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 }
 
 #pragma mark - 懒加载
-- (NSMutableDictionary *)topSpacingMutDict{
+- (NSMutableDictionary *)topSpacingMutDict {
     if (!_topSpacingMutDict) {
         _topSpacingMutDict = [[NSMutableDictionary alloc]init];
     }return _topSpacingMutDict;
@@ -359,7 +430,11 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 
 - (JKKeyboardToolBar *)toolBar{
     if (!_toolBar) {
-        _toolBar = [[JKKeyboardToolBar alloc]initWithFrame:CGRectMake(0, 0, self.keyWindow.bounds.size.width, 40) target:self leftArrowAction:@selector(didClickedLeftArrowButton:) rightArrowAction:@selector(didClickedRightArrowButton:) doneAction:@selector(didClickedDoneButton:)];
+        _toolBar = [[JKKeyboardToolBar alloc]initWithFrame:CGRectMake(0, 0,self.keyWindow.bounds.size.width, 40)
+                                                    target:self
+                                           leftArrowAction:@selector(didClickedLeftArrowButton:)
+                                          rightArrowAction:@selector(didClickedRightArrowButton:)
+                                                doneAction:@selector(didClickedDoneButton:)];
     }return _toolBar;
 }
 @end

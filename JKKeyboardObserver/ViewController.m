@@ -17,25 +17,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Push" style:UIBarButtonItemStylePlain target:self action:@selector(push)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"停止监听" style:UIBarButtonItemStylePlain target:self action:@selector(push)];
     
+}
+
+- (void)testNiti:(NSNotification *)noti {
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     
     if (self.navigationController.viewControllers.count == 1) {
         KeyboardManager().robotizationEnable = YES;
         KeyboardManager().topSpacingToFirstResponder = 20;
         KeyboardManager().showExtensionToolBar = YES;
     }
-    
-
-    
-    
-//    [KeyboardManager() setTopSpacingToFirstResponder:20 forViewControllerClass:self.class];
+    //    [KeyboardManager() setTopSpacingToFirstResponder:20 forViewControllerClass:self.class];
 }
+
+
+
 
 - (IBAction)button:(UIButton *)button {
     NSLog(@"button 被点击");
     [[JKKeyboardManager sharedKeyboardManager] hideKeyBoard];
 }
+
+
+
 
 
 - (void)push {
@@ -45,15 +55,7 @@
 }
 
 
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    NSLog(@"%@",self.navigationController.viewControllers);
-}
 
-- (void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
-    NSLog(@"%@",self.navigationController.viewControllers);
-}
 
 
 - (void)dealloc {
