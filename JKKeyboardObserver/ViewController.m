@@ -30,12 +30,16 @@
     
     if (self.navigationController.viewControllers.count == 1) {
         KeyboardManager().robotizationEnable = YES;
-        KeyboardManager().topSpacingToFirstResponder = 20;
         KeyboardManager().showExtensionToolBar = YES;
     }
+    
+    /// 给当前控制器定制间距
     //    [KeyboardManager() setTopSpacingToFirstResponder:20 forViewControllerClass:self.class];
+    
+//    KeyboardManager().keyWindow
+//    KeyboardManager().currentViewController
+    
 }
-
 
 
 

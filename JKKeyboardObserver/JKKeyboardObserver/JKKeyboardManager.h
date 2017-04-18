@@ -58,7 +58,7 @@
 
 
 /**
- 结束监听，释放Block强引用的对象
+ 结束监听，并释放Block强引用的对象
  */
 - (void)relieveBlockStrongReference;
 

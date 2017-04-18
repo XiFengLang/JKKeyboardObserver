@@ -1,24 +1,54 @@
-# 自动监听键盘弹出，自动处理键盘遮盖问题,动画调整输入框和键盘的相对位置。
-`1.1`
+![version](https://img.shields.io/badge/Version-v1.2.0-blue.svg) ![platform](https://img.shields.io/badge/platform-iOS-ligtgrey.svg)  ![ios](https://img.shields.io/badge/Requirements-iOS8%2B-green.svg)
+
+## JKKeyboardManager
+
+全局监听键盘弹出事件，自动处理键盘遮盖问题，动态调整输入框和键盘的相对位置。
 
 
-~~[详情戳简书](http://www.jianshu.com/p/8c5fb5b06771)~~，改版太大，参考意义不大。
+## Usage
 
--------
+* 在`application didFinishLaunchingWithOptions` 中初始化并设置全局属性
 
-**几行代码即可**
 ```Object-C
+
     KeyboardManager().robotizationEnable = YES;
-    KeyboardManager().topSpacingToFirstResponder = 20;  // 设置键盘到输入框的距离的全局效果，
-    KeyboardManager().showExtensionToolBar = YES;      // 可以切换上下左右的输入框
+    // 设置键盘到输入框的距离
+    KeyboardManager().topSpacingToFirstResponder = 20;
+    // 显示自定义的toolBar，切换输入框或者隐藏键盘
+    KeyboardManager().showExtensionToolBar = YES;
     
-     // 设置特定控制器中键盘到输入框的距离
-//    [KeyboardManager() setTopSpacingToFirstResponder:30 forViewControllerClass:self.class];
+    // 内联函数，返回单例
+	static inline JKKeyboardManager * KeyboardManager() {
+	    return [JKKeyboardManager sharedKeyboardManager];
+	}
 ```
 
 
+* 为特定类定制属性，比如键盘到输入框的距离
 
-**隐藏键盘**
 ```Object-C
-     [KeyboardManager() hideKeyboard];
+	[KeyboardManager() setTopSpacingToFirstResponder:30 forViewControllerClass:self.class];
 ```
+
+
+## 其他
+
+* 隐藏键盘（全局效果）
+
+```Object-C
+   [KeyboardManager() hideKeyboard];
+```
+
+* 取当前显示的window
+
+```Object-C
+	KeyboardManager().keyWindow
+```
+
+* 取最上层的控制器（当前显示的控制器）
+
+```Object-C
+	KeyboardManager().currentViewController
+```
+
+![gif](https://github.com/XiFengLang/JKKeyboardObserver/blob/master/JKKeyboardManager.gif)
