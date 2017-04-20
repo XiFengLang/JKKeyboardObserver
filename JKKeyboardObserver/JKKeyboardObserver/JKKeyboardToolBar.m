@@ -71,6 +71,7 @@
         UIBarButtonItem * flexibleSpaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         
         UIBarButtonItem * doneItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:target action:doneAction];
+        doneItem.tintColor = [UIColor blackColor];
         
         [self setItems:@[leftArrow,rightArrow,flexibleSpaceItem,doneItem]];
         self.tintColor = [UIColor blackColor];

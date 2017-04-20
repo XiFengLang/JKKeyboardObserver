@@ -279,10 +279,12 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
 - (void)stopObserveKeyboard{
     
     /// 释放 self.toolBar,同将所有的响应者的inputAccessoryView设置为Nil,防止停止监听键盘后再次出现自定义的TooBar
-    self.toolBar = nil;
     [self.responderArray enumerateObjectsUsingBlock:^(UITextField * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.inputAccessoryView = nil;
+        if ([obj.inputAccessoryView isKindOfClass:[JKKeyboardToolBar class]]) {
+            obj.inputAccessoryView = nil;
+        }
     }];
+    self.toolBar = nil;
     
     /// 移除监听者，释放Block强引用的对象
     if (self.keyboardObserver) {
