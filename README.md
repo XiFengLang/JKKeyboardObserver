@@ -51,4 +51,4 @@
 	KeyboardManager().currentViewController
 ```
 
-![gif](https://github.com/XiFengLang/JKKeyboardObserver/blob/master/JKKeyboardManager.gif)
+![gif](http://wx1.sinaimg.cn/mw690/c56eaed1gy1fetak12q21g20bf0kjtlg.gif)
