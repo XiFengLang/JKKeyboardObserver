@@ -59,6 +59,8 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
  缓存当前控制器view的frame
  */
 @property (nonatomic, strong) NSValue * tempFrame;
+
+
 @end
 
 @implementation JKKeyboardManager
@@ -132,10 +134,14 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
         [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             
             CGRect tempRect = currentViewController.view.frame;
-            if (distance < 0 || tempRect.origin.y < 0) {
+            if (distance < 0) {
+                tempRect.origin.y = distance;
+            } else if ((tempRect.origin.y + distance) < 0) {
                 tempRect.origin.y += distance;
-                currentViewController.view.frame = tempRect;
+            } else if (tempRect.origin.y < 0) {
+                tempRect = self.tempFrame.CGRectValue;
             }
+            currentViewController.view.frame = tempRect;
             
         } completion:nil];
     }
@@ -328,7 +334,11 @@ static const char * kKeyboardManagerRespondersKey = "kKeyboardManagerRespondersK
         else
             return viewController;
     } else {
-        return viewController;
+        if (viewController.childViewControllers.count > 0) {
+            return [self findTopsideViewController:viewController.childViewControllers.lastObject];
+        } else {
+            return viewController;
+        }
     }
 }
 
